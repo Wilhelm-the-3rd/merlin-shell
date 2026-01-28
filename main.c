@@ -12,8 +12,6 @@ char** tokenize(char* line);
 int execute(char** cmd);
 
 int main(const int argc, char *argv[]) {
-
-    
     if (argc > 1) {
         printf("MeSh does not support multiple arguments at this time.\nUsage: %s", argv[0]);
     }
@@ -28,10 +26,7 @@ void shell_loop() {
     {
         printf("<> "); 
 
-        char **tokenized_input = tokenize(
-            read_input() 
-            );
-
+        char **tokenized_input = tokenize(read_input());
         const int cmd_success = execute(tokenized_input); 
 
         free(tokenized_input); 
@@ -46,13 +41,20 @@ char* read_input() {
     int buffer_size = MESH_IN_BUFSIZE, input_position = 0;
     char* buffer = malloc(buffer_size * sizeof(char));
 
-    if (!buffer) { fprintf(stderr, "MeSh: Memory could not be allocated.\n"); exit(EXIT_FAILURE); }
+    if (!buffer) {
+        fprintf(stderr, "MeSh: Memory could not be allocated.\n");
+        exit(EXIT_FAILURE);
+    }
 
-    for (;;) {
+    for (;;)
+    {
 
         const char current_char = getchar();
 
-        if (current_char == '\n' || current_char == EOF) { buffer[input_position] = '\0'; return buffer; }
+        if (current_char == '\n' || current_char == EOF) {
+            buffer[input_position] = '\0';
+            return buffer;
+        }
 
         buffer[input_position] = current_char;
         input_position++;
@@ -61,7 +63,10 @@ char* read_input() {
         {
             buffer_size += MESH_IN_BUFSIZE;
             buffer = realloc(buffer, buffer_size);
-            if (!buffer) { fprintf(stderr, "MeSh: Memory could not be allocated.\n"); exit(EXIT_FAILURE);}
+            if (!buffer) {
+                fprintf(stderr, "MeSh: Memory could not be allocated.\n");
+                exit(EXIT_FAILURE);
+            }
         }
     }
 }
@@ -75,7 +80,10 @@ char** tokenize(char* str) {
     char** token_list = malloc(buffer_size * sizeof(char));
     char* token;
 
-    if (!token_list) { fprintf(stderr, "MeSh: Memory could not be allocated.\n"); exit(EXIT_FAILURE); }
+    if (!token_list) {
+        fprintf(stderr, "MeSh: Memory could not be allocated.\n");
+        exit(EXIT_FAILURE);
+    }
 
     token = strtok(str, MESH_DELIM);
 
